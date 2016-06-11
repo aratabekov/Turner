@@ -1,0 +1,97 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+
+<div ng-controller="StoreController as store">
+    <!--  Title Header  -->
+    <header>
+        <h1 class="text-center">Turner Broadcasting Challenge</h1>
+        <h2 class="text-center">– Titles –</h2>
+    </header>
+
+    <div>
+        <h2>Search by Title Name</h2>
+        <input type="text" ng-model="searchBox" id="prodId" size="15" />
+        <input type="button" value="Search" onclick="find();" />
+        <p id="product" />
+    </div>
+
+    <!--  Title Container  -->
+    <div class="list-group">
+        <!--  Title Container  -->
+        <div class="list-group-item" ng-repeat="title in store.titles | filter:searchBox">
+            <h3>{{title.TitleName}} <em class="pull-right">{{title.ReleaseYear}}</em></h3>
+        
+            <!-- Title Tabs  -->
+            <section ng-controller="TabController as tab">
+                <ul class="nav nav-pills">
+                    <li ng-class="{ active:tab.isSet(1) }">
+                        <a href ng-click="tab.setTab(1,title.TitleId)">Description</a>
+                    </li>
+                    <li ng-class="{ active:tab.isSet(2) }">
+                        <a href ng-click="tab.setTab(2,title.TitleId)">Awards</a>
+                    </li>
+                    <li ng-class="{ active:tab.isSet(3) }">
+                        <a href ng-click="tab.setTab(3,title.TitleId)">Storylines</a>
+                    </li>
+                    <li ng-class="{ active:tab.isSet(4) }">
+                        <a href ng-click="tab.setTab(4,title.TitleId)">Participants</a>
+                    </li>
+                </ul>
+
+                <!--  Description Tab's Content  -->
+                <div ng-show="tab.isSet(1)">
+                    <h4>Description</h4>                    
+                    <p><strong>Title Name:</strong> {{title.TitleName}}<br /></p>
+                    <p> <strong>Year: </strong>{{title.ReleaseYear}}<br /></p>
+                    <p>
+                        <strong>Genre:</strong> <span ng-repeat="genre in title.TitleGenres">
+                            {{genre.Genre.Name}},
+                        </span><br />
+                    </p>                    
+                </div>
+
+                <!--  Award Tab's Content  -->
+                <div ng-show="tab.isSet(2)"  >
+                    <div >
+                        <h4>Awards</h4>
+                        <p ng-repeat="award in awards" ng-show="award.AwardWon">
+                            <strong>Award: </strong> {{award.Award1}}<br />                           
+                            <strong>Award Year: </strong> {{award.AwardYear}}<br />
+                        </p>
+                    </div>                    
+                </div>
+
+                <!--  Story line Tab's Content  -->
+                <div ng-show="tab.isSet(3)" >
+                    <ul>
+                        <h4>Story Lines</h4>
+                        <li ng-repeat="line in storylines">
+                            <blockquote>
+                                <strong>{{line.Type}} - </strong>
+                                {{line.Description}}                              
+                            </blockquote>
+                        </li>
+                    </ul>   
+                </div>
+
+                <!--  Participants Tab's Content  -->
+                <div ng-show="tab.isSet(4)">
+                    <ul>
+                        <h4>Participants</h4>
+                        <p ng-repeat="participant in participants">                            
+                                <strong>{{participant.Participant.Name}} - </strong> <br />
+                                 Role Type: {{participant.RoleType}}<br />                            
+                        </p>
+                    </ul>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    @Scripts.Render("~/Scripts/angular.js")
+    @Scripts.Render("~/Scripts/app/app.js")
+}
